@@ -1,0 +1,74 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Deable\Redis\Diagnostics\Tracy;
+
+use Deable\Redis\Diagnostics\Tracy\RedisClientPanelRequest;
+use Nette\Utils\Strings;
+use Tracy\Dumper;
+
+/** @var RedisClientPanel $this */
+/** @var RedisClientPanelRequest $request */
+?>
+<style class="tracy-debug">
+
+	#tracy-debug .tracy-redis table {
+		width: 100%;
+		white-space: nowrap;
+	}
+
+	#tracy-debug .tracy-redis .tracy-redis-muted {
+		color: #CCC;
+	}
+
+	#tracy-debug .tracy-redis .tracy-dump {
+		background: white !important;
+	}
+
+	#tracy-debug .tracy-redis .tracy-redis-method {
+		font-family: monospace;
+		font-weight: bold;
+		background: white !important;
+	}
+
+	#tracy-debug .tracy-redis .tracy-redis-args {
+		background: white !important;
+	}
+
+	#tracy-debug .tracy-redis .tracy-redis-result {
+		font-family: monospace;
+		background: white !important;
+	}
+
+	#tracy-debug .tracy-redis .tracy-dump {
+		margin: 0;
+		padding: 0;
+	}
+
+</style>
+
+<h1>Requests: <?php echo $this->count ?> on <?php echo $this->name ?></h1>
+
+<div class="tracy-inner tracy-redis">
+	<table class="tracy-sortable">
+		<tr>
+			<th>ms</th>
+			<th>Method</th>
+			<th>Arguments</th>
+			<th>Result</th>
+		</tr>
+		<?php foreach ($this->requests as $request): ?>
+			<tr>
+				<td><?php echo sprintf('%0.2f', $request->getTime()) ?></td>
+				<td class="tracy-redis-method"><?php echo Strings::upper($request->cmd) ?></td>
+				<td class="tracy-redis-args">
+					<?php echo Dumper::toHtml($request->args, [Dumper::LIVE => true]) ?>
+				</td>
+				<td class="tracy-redis-result">
+                    <?php echo $this->formatResult($request->result) ?>
+				</td>
+			</tr>
+		<?php endforeach ?>
+	</table>
+</div>

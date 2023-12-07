@@ -1,0 +1,37 @@
+{
+	"name": "deable/redis",
+	"type": "library",
+	"description": "Simpliest way to use redis client on your nette project.",
+	"keywords": [
+		"nette",
+		"redis"
+	],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Lukas Povoda",
+			"email": "lupo112@gmail.com"
+		}
+	],
+	"require": {
+		"php": ">= 7.4",
+		"deable/serializer": "^1.0",
+		"nette/application": "^3.0",
+		"nette/di": "^3.0",
+		"tracy/tracy": "^2.2"
+	},
+	"archive": {
+		"exclude": [
+			".gitignore",
+			".editorconfig",
+			"*.md",
+			"*.yml",
+			"*.xml"
+		]
+	},
+	"autoload": {
+		"psr-4": {
+			"Deable\\Redis\\": "src"
+		}
+	}
+}
