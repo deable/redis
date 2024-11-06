@@ -30,14 +30,11 @@ final class RedisClientPanel implements IBarPanel, DiagnosticsHandler
 	/** @var RedisClientPanelRequest[] */
 	public array $requests = [];
 
-	private Serializer $serializer;
-
 	private ?RedisClientPanelRequest $last = null;
 
-	public function __construct(string $name, ?Serializer $serializer = null)
+	public function __construct(string $name)
 	{
 		$this->name = $name;
-		$this->serializer = $serializer ?: new DefaultSerializer();
 	}
 
 	public function getTab(): string
@@ -80,10 +77,10 @@ final class RedisClientPanel implements IBarPanel, DiagnosticsHandler
 		if ($value instanceof Redis) {
 			return $el->setAttribute('class', 'tracy-redis-muted')->setText('none');
 		}
-		if (is_string($value) && ($object = @$this->serializer->decode($value)) !== false) {
+		if (is_string($value) && ($object = json_decode($value, true)) !== null) {
 			return $el->addHtml(Dumper::toHtml($object, [Dumper::LIVE => true]));
 		}
-		if (is_string($value) && preg_match('~[^\x20-\x7E\t\r\n]~', $value) > 0) {
+		if (is_string($value) && preg_match('~[\x20-\x7E\t\r\n]~', $value) > 0) {
 			return $el->setAttribute('class', 'tracy-redis-muted')->setText('(binary)');
 		}
 
